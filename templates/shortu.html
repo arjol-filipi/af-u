@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}URL Shorner{% endblock title %}
+
+{% block content %}
+<form action="{% url 'shortu:submit' %}" method="POST">
+    {% csrf_token %}
+  <div class="form-group">
+    <label for="exampleInputEmail1">Your long url</label>
+    {{ form.url}}
+    {% comment %} <input type="text" class="form-control" id="url" aria-describedby="emailHelp" placeholder="Long Url"> {% endcomment %}
+    <small id="url-label" class="form-text text-muted">Paste long Url here.</small>
+  </div>
+  <div class="form-group">
+    <label for="pref-url">my-url</label>
+    {{ form.costom}}
+    
+    <small id="url-pref" class="form-text text-muted">Give costum short url.</small>
+  </div>
+  
+  <button type="submit"  class="btn btn-primary">Submit</button>
+</form>
+<br>
+{% if links %}
+<div class="container">
+    <label >Your previous links</label>
+    <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Link</th>
+        <th>Short Link</th>
+        <th>Visits</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for link in links %}
+      
+      
+      <tr>
+        <td><a class="link" href="{% url 'shortu:info' link.shorturl %}">{{ link.link }}</a></td>
+        <td> <a class="btn btn-primary" href="{% url 'shortu:follow' link.shorturl %}">
+        {{ link.shorturl}}
+        </a>
+        </td>
+        <td>{{ link.vi}}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+
+{% endif %}
+<div class="container">
+    <label >Top 5 links</label>
+    <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Link</th>
+        <th>Short Link</th>
+        <th>Visits</th>
+        <th>By user</th<
+      </tr>
+    </thead>
+    <tbody>
+      {% for link in t %}
+      
+      
+      <tr>
+        <td><a class="link" href="{% url 'shortu:info' link.shorturl %}">{{ link.link }}</a></td>
+        <td> <a class="btn btn-primary" href="{% url 'shortu:follow' link.shorturl %}">
+        {{ link.shorturl}}
+        </a>
+        </td>
+        <td>{{ link.vi}}</td>
+        <td>{{ link.user}}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,104 @@
+{% extends "base.html" %}{% load static %}
+
+
+{% block title %}
+News
+{% endblock title %}
+
+
+{% block extrahead %}
+<!-- Custom styles for this template -->
+  <link href="{% static 'css/blog-post.css' %} " rel="stylesheet">
+
+{% endblock extrahead %}
+  
+{% block content %}
+
+
+<!-- Page Content -->
+  <div class="container">
+
+    <div class="row">
+
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+
+        <!-- Title -->
+        <h1 class="mt-4">{{ object.title }}</h1>
+
+       
+        <hr>
+
+        <!-- Date/Time -->
+        <p>{{ object.published }}</p>
+
+        <hr>
+        {% if object.video %}
+        <iframe width="854" height="480"
+src="{{object.img}}">
+</iframe>
+        {% else %}
+        <img class="img-fluid rounded" src="{{object.img}}" alt="">
+        {% endif %}
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="{{object.img}}" alt="">
+
+        <hr>
+
+        <!-- Post Content -->
+        <p class="lead">{{object.content|safe}}</p>
+        <hr>
+        <a href="{% url 'news:news' %}">
+        <button class="btn btn-danger" >Go back</button>
+        </a>
+        <hr>
+
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Komento:</h5>
+          <div class="card-body">
+            <form>
+              <div class="form-group">
+                <textarea class="form-control" rows="3"></textarea>
+              </div>
+              {% if user.is_authenticated %}
+              <button type="submit" class="btn btn-primary">Submit</button>
+              {% else %}
+              <a class= "btn btn-primary" href="{% url 'account_signup'%}">Sign Up</a>
+              <a class= "btn btn-primary" href="{% url 'account_login'%}">Login</a>
+              {% endif %}
+              
+
+            </form>
+          </div>
+        </div>
+        <hr>
+        
+
+
+ 
+        <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0">1</h5>
+            1
+
+            <div class="media mt-4">
+              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              <div class="media-body">
+                <h5 class="mt-0">2</h5>
+                2
+              </div>
+            </div>
+
+            <div class="media mt-4">
+              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              <div class="media-body">
+                <h5 class="mt-0">3</h5>
+                3
+              </div>
+            </div>
+
+          </div>
+        </div>
+{% endblock content %}

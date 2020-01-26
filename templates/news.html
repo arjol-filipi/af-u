@@ -1,0 +1,64 @@
+{% extends "base.html" %}{% load static %}
+
+
+{% block title %}
+News
+{% endblock title %}
+
+
+{% block extrahead %}
+<!-- Custom styles for this template -->
+  <link href="{% static 'css/heroic-features.css' %} " rel="stylesheet">
+
+{% endblock extrahead %}
+  
+{% block content %}
+
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Jumbotron Header -->
+    <header class="jumbotron my-4">
+      <h1 class="display-3">A Warm Welcome!</h1>
+      <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsa, ipsam, eligendi, in quo sunt possimus non incidunt odit vero aliquid similique quaerat nam nobis illo aspernatur vitae fugiat numquam repellat.</p>
+      <a href="#" class="btn btn-primary btn-lg">Call to action!</a>
+    </header>
+
+    <!-- Page Features -->
+    <div class="row text-center">
+        {% for article in object_list %}
+        
+        
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img class="card-img-top" src="{{ article.img }}" alt="">
+          <div class="card-body">
+            <h4 class="card-title">{{ article.title|truncatechars:100 }}</h4>
+            <p class="card-text">{{ article.content|striptags|truncatechars:80 }}</p>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'news:article' article.slug %}" class="btn btn-primary">Me teper!</a>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+{% endblock content %}
