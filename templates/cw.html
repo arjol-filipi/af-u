@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Crosswords{% endblock title %}
+
+{% block extrahead %}
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+{% endblock extrahead %}
+
+{% block content %}
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Af-u</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'cw:Main' %}">Generate Crosswords
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cw:list' %}">All Crosswords</a>
+          </li>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+                      
+            <a class="nav-link" href="{% url 'account_logout'%}">Log out!</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'account_login'%}">Log in!</a>
+            {% endif %}
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+<div class='container'>
+<form action='/cw/create' method= "POST" id = "create" >
+    {% csrf_token %}
+    <div class="form-group">
+    <label> Input number of rows:</label>
+    {{form.rows}}</div>
+    <div class="form-group">
+    <label> Input number of cols:</label>
+    {{form.col}}</div>
+    <div class="form-group">
+    <label> Input time to generate:</label>
+    {{form.time}}</div>
+    <div id="results"></div> <!-- errors go here -->
+    <button type="submit"  class="btn btn-primary">Submit</button>
+</form>
+</div>
+<div class='container' id = 'preview'>
+    <form method='POST' id='save'>
+    {% csrf_token %}
+    <table id='table' class='table-bordered'>
+    </table>
+
+    </form>
+</div>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+
+$(function() {
+  $('input').addClass('form-control');
+});
+
+// Submit post on submit
+$('#create').on('submit', function(event){
+    event.preventDefault();
+    console.log("form submitted!")  // sanity check
+    generate();
+});
+
+var  board;
+// AJAX for posting
+// AJAX for posting
+function generate() {
+    console.log("create post is working!") // sanity check
+    $.ajax({
+        url : "{% url 'cw:create' %}", // the endpoint
+        type : "POST", // http method
+        data : { rows : $('#id_rows').val() ,col : $('#id_col').val(),time : $('#id_time').val(),
+        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value }, // data sent with the post request
+     
+        // handle a successful response
+        success : function(json) {
+            $('#id-col').val('');
+            $('#id-time').val('');
+            $('#id-rows').val(''); // remove the value from the input
+            console.log("Json");
+            board=json['board'];
+            $('#table tr').remove();
+            var $table = $('#table');
+            
+            var row, cell;
+            for(var i=0; i<board.length; i++){
+            row = $( '<tr />' );
+            
+            for(var j=0; j<board[i].length; j++){
+                    //class="text-white bg-dark"
+                    let c =board[i][j];
+                    if(c== '$'){
+                        cell = $('<td class="bg-dark">'+'</td>')
+                    }else{
+            cell = $('<td>'+c+'</td>')
+                    }
+
+            row.append( cell );
+            //console.log(board[i][j]);
+            }
+            
+            $table.append( row );
+            }
+            $('#save button').remove();
+            $('#save').append($('<button type="submit"  class="btn btn-primary">Save</button>'))
+
+            // Submit post on submit
+            $('#save').on('submit', function(event){
+            event.preventDefault();
+            console.log("form submitted!")  // sanity check
+            save();
+            });
+            
+
+            console.log($table);
+            console.log(board); // log the returned json to the console
+            console.log("success"); // another sanity check
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+
+function save() {
+    console.log("saving") // sanity check
+$.ajax({
+        url : "{% url 'cw:Save' %}", // the endpoint
+        type : "POST", // http method
+        data : { 'grid' : board ,
+        csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[1].value }, // data sent with the post request
+     
+        // handle a successful response
+        success : function(link) {
+            console.log(link);
+                    },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $('#results').html("<div class='alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
+                " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+</script>
+<script>
+{% endblock content %}

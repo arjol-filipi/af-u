@@ -1,0 +1,121 @@
+{% extends "base.html" %}{% load static %}
+
+
+{% block title %}
+All Crosswords
+{% endblock title %}
+
+{% block extrahead %}
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+{% endblock extrahead %}
+
+{% block content %}
+
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Af-u</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'cw:Main' %}">Generate Crosswords
+              
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'cw:list' %}">All Crosswords</a>
+            <span class="sr-only">(current)</span>
+          </li>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+                      
+            <a class="nav-link" href="{% url 'account_logout'%}">Log out!</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'account_login'%}">Log in!</a>
+            {% endif %}
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+  <!-- Page Content -->
+  <div class="container">
+
+    
+    <!-- Page Features -->
+    <div class="row text-center">
+        {% for article in object_list %}
+        
+        
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h4 class="card-title">{{ article.id }}</h4>
+            <p class="card-text">{{ article.published }}</p>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'cw:play' article.pk %}" class="btn btn-primary">Play!</a>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+
+    </div>
+    <!-- /.row -->
+    {% if is_paginated %}
+      <nav class="d-flex justify-content-center wow fadeIn">
+        <ul class="pagination pg-blue">
+
+          {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+          {% endif %}
+
+          <li class="page-item active">
+            <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+
+          {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+      {% endif %}
+  </div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; AF 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endblock content %}

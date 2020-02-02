@@ -1,9 +1,6 @@
 {% extends "base.html" %}{% load static %}
+{% block title %}{{ object.title}}{% endblock title %}
 
-
-{% block title %}
-News
-{% endblock title %}
 
 
 {% block extrahead %}
@@ -57,9 +54,11 @@ src="{{object.img}}">
         <div class="card my-4">
           <h5 class="card-header">Komento:</h5>
           <div class="card-body">
-            <form>
+            <form action="{% url 'news:comment' object.slug %}" method="POST">
+            {% csrf_token %}
               <div class="form-group">
-                <textarea class="form-control" rows="3"></textarea>
+              {{form.comment}}
+               
               </div>
               {% if user.is_authenticated %}
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -75,30 +74,122 @@ src="{{object.img}}">
         <hr>
         
 
+{% for comment in artikull.comment_set.all %}
+        {% if comment.level == 1 %}
+        
+        
+        
+      <div class="card">
+	    <div class="card-body">
+	        <div class="row">
+        	    <div class="col-md-2">
+        	        
+        	        <p class="text-secondary text-center">{{comment.postdate|timesince}}</p>
+        	    </div>
+        	    <div class="col-md-10">
+        	        <p>
+        	            <strong>{{comment.user}}</strong>
+        	       </p>
+        	       <div class="clearfix"></div>
+        	        <p>{{comment.con}}</p>
+                  <p>
+                  <form action="{% url 'news:reply' comment.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                    {{reply.reply}}
+                    
+                    </div>
+                    {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                    {% else %}
+                    <a class= "btn btn-primary" href="{% url 'account_signup'%}">Sign Up</a>
+                    <a class= "btn btn-primary" href="{% url 'account_login'%}">Login</a>
+                    {% endif %}
+                    
 
- 
-        <div class="media mb-4">
-          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-          <div class="media-body">
-            <h5 class="mt-0">1</h5>
-            1
+                  </form>
+        	            
+        	        </p>
+        	    </div>
+	        </div>
+	        	<div class="card card-inner">
+              {% if comment.children  %}
+              {% for child in comment.children %}
+              
+              
+              
+              
+            	    <div class="card-body">
+            	        <div class="row">
+                    	    <div class="col-md-2">
+                    	        <p class="text-secondary text-center">{{ child.postdate|timesince}}</p>
+                    	    </div>
+                    	    <div class="col-md-10">
+                    	        <p><strong>{{child.user}}</strong></p>
+                    	        <p>{{ child.con }}</p>
+                    	        <p>
+                    	            <form action="{% url 'news:reply' child.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                    {{reply.reply}}
+                    
+                    </div>
+                    {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                    {% else %}
+                    <a class= "btn btn-primary" href="{% url 'account_signup'%}">Sign Up</a>
+                    <a class= "btn btn-primary" href="{% url 'account_login'%}">Login</a>
+                    {% endif %}
+                    
 
-            <div class="media mt-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-              <div class="media-body">
-                <h5 class="mt-0">2</h5>
-                2
-              </div>
-            </div>
+                  </form>
+                    	       </p>
+                    	    </div>
+            	        </div>
+            	    </div>
+                  <div class="card card-inner">
+              {% if child.children  %}
+              {% for l3 in child.children %}
+              
+              
+              
+              
+            	    <div class="card-body">
+            	        <div class="row">
+                    	    <div class="col-md-2">
+                    	        <p class="text-secondary text-center">{{ l3.postdate|timesince}}</p>
+                    	    </div>
+                    	    <div class="col-md-10">
+                    	        <p><strong>{{l3.user}}</strong></p>
+                    	        <p>{{ l3.con }}</p>
+                    	        <p>
+                    	            <form action="{% url 'news:reply' l3.id %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                    {{reply.reply}}
+                    
+                    </div>
+                    {% if user.is_authenticated %}
+                    <button type="submit" class="btn btn-primary">Reply</button>
+                    {% else %}
+                    <a class= "btn btn-primary" href="{% url 'account_signup'%}">Sign Up</a>
+                    <a class= "btn btn-primary" href="{% url 'account_login'%}">Login</a>
+                    {% endif %}
+                    
 
-            <div class="media mt-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-              <div class="media-body">
-                <h5 class="mt-0">3</h5>
-                3
-              </div>
-            </div>
-
-          </div>
-        </div>
+                  </form>
+                    	       </p>
+                    	    </div>
+            	        
+            	    
+                  {% endfor %}
+              {% endif %}
+              </div></div>
+                  {% endfor %}
+              {% endif %}
+	            </div>
+	    </div>
+	</div>
+  {% endif %}
+    {% endfor %}
 {% endblock content %}

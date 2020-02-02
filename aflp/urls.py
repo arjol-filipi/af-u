@@ -8,7 +8,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('', include('core.urls')),
     path('', include('shortu.urls')),
-    path('', include('news.urls'))
+    path('', include('news.urls')),
+    path('', include('cw.urls'))
     ]
 
 if settings.DEBUG:

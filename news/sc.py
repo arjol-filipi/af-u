@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests,re
 # from news.models import Artikull
 from django.utils.text import slugify
+from datetime import datetime,timedelta
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -17,6 +18,9 @@ def create_slug(title, new_slug=None):
             return create_slug(title, new_slug=new_slug)
         return slug
 
+def deleteOld():
+    Artikull.objects.filter(published__lte=datetime.now()-timedelta(days=30)).delete()
+    print("deleted old artikull")
 
 def scrappTop():
     session = requests.Session()

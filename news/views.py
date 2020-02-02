@@ -1,19 +1,83 @@
 from django.shortcuts import render
 from django.views.generic import ListView,DetailView
+from .forms import CommentForm,ReplyForm
+from django.views.decorators.http import require_GET, require_POST
+from django.http import HttpResponseRedirect
+from django.db.models import Q
 #scrap
 from bs4 import BeautifulSoup
 import requests,re
 from django.utils.text import slugify
 
 
-from .models import Artikull
+from .models import Artikull,Comment
 class News(ListView):
     queryset = Artikull.objects.order_by('-published')
+    paginate_by = 12
     template_name = 'news.html'
+    def get_context_data(self,**kwargs):
+        context = super(News,self).get_context_data(**kwargs)
+        
+        context['sq'] = None       
+        return context
 
 class Article(DetailView):
     model = Artikull
     template_name = 'article.html'
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        
+        context['form'] = CommentForm
+        context['reply'] = ReplyForm
+        return context
+class SearchView(ListView):
+    template_name = 'news.html'
+    
+    paginate_by = 12
+    def get_context_data(self,**kwargs):
+        context = super(SearchView,self).get_context_data(**kwargs)
+        query = self.request.GET.get('q')
+        context['sq'] = query        
+        return context
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        print(query)
+        object_list = Artikull.objects.filter(
+                Q(title__icontains=query)|Q(content__icontains=query)
+            )
+        return object_list.order_by('-published')
+
+
+@require_POST
+def CommentView(request,slug):
+    form = CommentForm(request.POST)
+    artikull = Artikull.objects.filter(slug = slug)
+    if form.is_valid():
+        content = form.cleaned_data['comment']
+        user = request.user
+        
+        new_comment = Comment.objects.create(user=user,artikull=artikull[0],con=content)
+
+    
+    return HttpResponseRedirect(artikull[0].get_absolute_url())
+@require_POST
+def ReplyView(request,id):
+    parent = Comment.objects.filter(id= id)
+    if parent.exists():
+        parent = parent[0]
+        form = ReplyForm(request.POST)
+        if form.is_valid():
+            con = form.cleaned_data['reply']
+            user = request.user
+            level = parent.level + 1
+            if level > 3:
+                parent = parent.parent
+                level = 3
+            new_reply = Comment.objects.create(user= user,parent=parent,con=con,level = level,artikull=parent.artikull)
+            return HttpResponseRedirect(parent.artikull.get_absolute_url())
+    return HttpResponseRedirect('/')
+
 def create_slug(title, new_slug=None):
         slug = slugify(title, allow_unicode = True)
         if new_slug is not None:
