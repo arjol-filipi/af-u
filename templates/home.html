@@ -56,28 +56,6 @@ Arjol Filipi Portfolio
     </div>
   </nav>
   <br>    
-<h1>Django Apps</h1>
-<a href="/shortu/">URL Shortner</a>
-<a href="/news/">News Agregator</a>
-<a href="/cw/">CrossWord</a>
-<br>
-{% if user.is_authenticated %}
- 
-
-<p>Welcome {{ user.username }} !!!</p>
-<a class= "btn btn-primary" href="{% url 'account_logout'%}">Log out!</a>
-{% else %}
-<a class="nav-link waves-effect" href="{% url 'account_signup' %}">
-              <span class="clearfix d-none d-sm-inline-block"> Signup </span>
-            </a>
-<br>
-
-<a href="{% provider_login_url 'github' %}"><img height="32" width="32" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg" /></a>
-
-<a href="{% provider_login_url 'facebook' %}"><img height="32" width="32" src="https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/facebook.svg" /></a>
-{% endif %}
-
-
 <!-- Top content -->
         <div class="top-content">
        		<div class="row no-gutters">
