@@ -5,12 +5,48 @@
 
 {% block extrahead %}
 <!-- Custom styles for this template -->
-  <link href="{% static 'css/blog-post.css' %} " rel="stylesheet">
-
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 {% endblock extrahead %}
   
 {% block content %}
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Af-u
+      <span class="sr-only">(current)</span></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/shortu/">URL Shortner
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/cw/">Crosswords</a>
+          </li>
+                    <li class="nav-item">
+            <a class="nav-link" href="/news/">News Agregator</a>
+          </li>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+                      
+            <a class="nav-link" href="{% url 'account_logout'%}">Log out!</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'account_login'%}">Log in!</a>
+            {% endif %}
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
 <!-- Page Content -->
   <div class="container">

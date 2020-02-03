@@ -123,4 +123,4 @@ def scrappKlan():
                     new_a.video = True
                 new_a.slug=slug
                 new_a.save()
-scrappKlan()
+# scrappKlan()

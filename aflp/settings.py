@@ -1,4 +1,5 @@
 import os
+import django_heroku
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
@@ -32,7 +33,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.instagram',
+    #'allauth.socialaccount.providers.instagram',
     'allauth.socialaccount.providers.twitter',
 ]
 
@@ -137,3 +138,6 @@ SOCIALACCOUNT_PROVIDERS = \
 #facebook
 SOCIAL_AUTH_FACEBOOK_KEY = '213737019657333'
 SOCIAL_AUTH_FACEBOOK_SECRET ='2b0a8a89d0ea2a52d0c1c2ad978a4be2'
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
