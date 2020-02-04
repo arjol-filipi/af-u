@@ -1,6 +1,6 @@
 from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
-from news.sc import scrappTop,scrappKlan,deleteOld
+from news.sc import scrappTop,scrappKlan
 
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
-from news.sc import scrappTop,scrappKlan,deleteOld
+from news.sc import scrappTop,scrappKlan
 
 def start():
     scheduler = BackgroundScheduler()
