@@ -31,7 +31,7 @@ def Load(request):
             data = json.load(f)
             
             for key,value in data.items():
-                clues = value.split('-_-')
+                clues = value.split('-_-')[0]
                 length = len(key)
                 popularity = len(clues)
                 ans_qs = Ans.objects.filter(word=key)
