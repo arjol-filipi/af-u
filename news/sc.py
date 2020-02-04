@@ -4,6 +4,8 @@ import requests,re
 from django.utils.text import slugify
 from datetime import datetime,timedelta
 
+from .models import Artikull,Comment
+
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
