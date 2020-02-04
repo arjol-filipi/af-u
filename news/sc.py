@@ -51,8 +51,8 @@ def scrappTop():
                 continue
             content = str(con[0])
             body= {
-            'title':title
-            'content':content
+            'title':title,
+            'content':content,
             'img':img
             }
             
@@ -112,9 +112,9 @@ def scrappKlan():
                 continue
             content ="".join(con)
             body ={
-            'title':title
-            'content':content
-            'img':img}
+            'title':title,
+            'content':content,
+            'img':img},
             if video:
                 body['video'] = True
             myurl = "https://af-u.herokuapp.com/news/add/"
