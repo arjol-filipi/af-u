@@ -1,10 +1,15 @@
 from datetime import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 from news.sc import scrappTop,scrappKlan,deleteOld
 
-def start():
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(scrappTop, 'interval', minutes=30)
-    scheduler.add_job(scrappKlan, 'interval', minutes=10)
-    scheduler.add_job(deleteOld, 'interval', days=1)
-    scheduler.start()
+sched = BlockingScheduler()
+@sched.scheduled_job( 'interval', minutes=30)
+def sct():  
+    scrappTop()
+@sched.scheduled_job( 'interval', minutes=10)
+def sck():
+    scrappKlan()
+@sched.scheduled_job('interval', days=1)
+def delO():
+    deleteOld()
+sched.start()
