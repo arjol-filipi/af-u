@@ -114,7 +114,7 @@ def scrappKlan():
             body ={
             'title':title,
             'content':content,
-            'img':img},
+            'img':img}
             if video:
                 body['video'] = True
             myurl = "https://af-u.herokuapp.com/news/add/"
