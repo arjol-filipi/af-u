@@ -110,7 +110,7 @@ def scrappKlan():
                 title[0]
             except IndexError:
                 continue
-            content ="".join(con)
+            content ="".join( str(c) for c in con)
             body ={
             'title':title,
             'content':content,

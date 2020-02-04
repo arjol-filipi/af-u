@@ -1,7 +1,7 @@
 from django.urls import path
 from django.conf.urls import url
 
-from .views import News,Article,CommentView,ReplyView,SearchView,Save_Art
+from .views import News,Article,CommentView,ReplyView,SearchView,Save_Art,scrappTop
 
 app_name = "news"
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path('news/reply/<id>', ReplyView, name='reply'),
     path('news/add/', Save_Art, name='add'),
     path('search/',SearchView.as_view(),name='search'),
+        path('news/test',scrappTop,name='st'),
     ]
