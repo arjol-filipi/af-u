@@ -17,7 +17,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'cw',
-    'news',
+    # 'news',
+    'news.apps.NewsConfig',
+
     #auth
     'django.contrib.auth',
     'django.contrib.messages',
