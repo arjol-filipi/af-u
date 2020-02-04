@@ -49,9 +49,10 @@ def scrappTop():
                 title[0]
             except IndexError:
                 continue
+            content = str(con[0])
             body= {
             'title':title
-            'content':str(con[0])
+            'content':content
             'img':img
             }
             
@@ -109,9 +110,10 @@ def scrappKlan():
                 title[0]
             except IndexError:
                 continue
+            content ="".join(con)
             body ={
             'title':title
-            'content':"".join(con)
+            'content':content
             'img':img}
             if video:
                 body['video'] = True
