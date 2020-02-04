@@ -11,6 +11,19 @@ from django.utils.text import slugify
 
 
 from .models import Artikull,Comment
+
+def Save_Art(request):
+    data = json.loads(request.body)
+    print(data)
+    title = data.get('title', None)
+    content = data.get('content', None)
+    img = data.get('img', None)
+    slug  = create_slug(title)
+    video = data.get('video', None)
+    qs = Artikull.objects.filter(title=title)
+    exists = qs.exists()
+    if not exists:
+        Article.object.create(title=tile,content=content,img=img,slug=slug,video=video)
 class News(ListView):
     queryset = Artikull.objects.order_by('-published')
     paginate_by = 12

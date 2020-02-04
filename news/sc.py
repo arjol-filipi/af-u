@@ -3,26 +3,16 @@ import requests,re
 # from news.models import Artikull
 from django.utils.text import slugify
 from datetime import datetime,timedelta
+import urllib.request
+import json      
 
-from .models import Artikull,Comment
 
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def create_slug(title, new_slug=None):
-        slug = slugify(title, allow_unicode = True)
-        if new_slug is not None:
-            slug = new_slug
-        qs = Artikull.objects.filter(slug=slug).order_by("-id")
-        exists = qs.exists()
-        if exists:
-            new_slug = "%s-%s"%(slug, qs.first().id)
-            return create_slug(title, new_slug=new_slug)
-        return slug
 
-def deleteOld():
-    Artikull.objects.filter(published__lte=datetime.now()-timedelta(days=30)).delete()
-    print("deleted old artikull")
+
+
 
 def scrappTop():
     session = requests.Session()
@@ -50,7 +40,7 @@ def scrappTop():
             else:
                 img = None
             con = p.find_all('div',attrs={'class':"articleContent"})
-            slug = create_slug(title)
+            
             try:
                 con[1]
             except IndexError: 
@@ -59,15 +49,20 @@ def scrappTop():
                 title[0]
             except IndexError:
                 continue
-            qs = Artikull.objects.filter(title=title)
-            exists = qs.exists()
-            if not exists:
-                new_a = Artikull()
-                new_a.title=title
-                new_a.content=str(con[0])
-                new_a.img=img
-                new_a.slug=slug
-                new_a.save()
+            body= {
+            'title':title
+            'content':str(con[0])
+            'img':img
+            }
+            
+            myurl = "https://af-u.herokuapp.com/news/add/"
+            req = urllib.request.Request(myurl)
+            req.add_header('Content-Type', 'application/json; charset=utf-8')
+            jsondata = json.dumps(body)
+            jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
+            req.add_header('Content-Length', len(jsondataasbytes))
+            print (jsondataasbytes)
+            response = urllib.request.urlopen(req, jsondataasbytes)
 
 def scrappKlan():
     session = requests.Session()
@@ -105,7 +100,7 @@ def scrappKlan():
             
             main = p.find('main')
             con = main.find_all('p')
-            slug = create_slug(title)
+           
             try:
                 con[0]
             except IndexError: 
@@ -114,15 +109,19 @@ def scrappKlan():
                 title[0]
             except IndexError:
                 continue
-            qs = Artikull.objects.filter(title=title)
-            exists = qs.exists()
-            if not exists:
-                new_a = Artikull()
-                new_a.title=title
-                new_a.content="".join(con)
-                new_a.img=img
-                if video:
-                    new_a.video = True
-                new_a.slug=slug
-                new_a.save()
+            body ={
+            'title':title
+            'content':"".join(con)
+            'img':img}
+            if video:
+                body['video'] = True
+            myurl = "https://af-u.herokuapp.com/news/add/"
+            req = urllib.request.Request(myurl)
+            req.add_header('Content-Type', 'application/json; charset=utf-8')
+            jsondata = json.dumps(body)
+            jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
+            req.add_header('Content-Length', len(jsondataasbytes))
+            print (jsondataasbytes)
+            response = urllib.request.urlopen(req, jsondataasbytes)
+
 # scrappKlan()
