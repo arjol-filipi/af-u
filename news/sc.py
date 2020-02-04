@@ -32,7 +32,7 @@ def scrappTop():
             p = BeautifulSoup(ar,"html.parser")
             title = p.find_all('div',attrs={'class':"inner titleInner"})
             title = p.find_all('h1')[0].text
-            print(title)
+            
 
             i=p.find_all('img',attrs={'class':"img-responsive fullWidthImage articleImage"})
             if i:
@@ -56,7 +56,7 @@ def scrappTop():
             'img':img
             }
             
-            myurl = "https://af-u.herokuapp.com/news/add/"
+            myurl = "https://af-u.herokuapp.com/new/add/"
             req = urllib.request.Request(myurl)
             req.add_header('Content-Type', 'application/json; charset=utf-8')
             jsondata = json.dumps(body)
@@ -117,7 +117,7 @@ def scrappKlan():
             'img':img}
             if video:
                 body['video'] = True
-            myurl = "https://af-u.herokuapp.com/news/add/"
+            myurl = "https://af-u.herokuapp.com/new/add/"
             req = urllib.request.Request(myurl)
             req.add_header('Content-Type', 'application/json; charset=utf-8')
             jsondata = json.dumps(body)

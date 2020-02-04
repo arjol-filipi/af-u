@@ -12,20 +12,28 @@ from news.sc import scrappKlan
 
 from .models import Artikull,Comment
 from django.views.decorators.csrf import csrf_exempt
-
+import json
 @csrf_exempt
 def Save_Art(request):
-    data = json.loads(request.body)
-    print(data)
-    title = data.get('title', None)
-    content = data.get('content', None)
-    img = data.get('img', None)
-    slug  = create_slug(title)
-    video = data.get('video', None)
-    qs = Artikull.objects.filter(title=title)
-    exists = qs.exists()
-    if not exists:
-        Article.object.create(title=tile,content=content,img=img,slug=slug,video=video)
+    print("at here")
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        print(data)
+        title = data.get('title', None)
+        content = data.get('content', None)
+        img = data.get('img', None)
+        slug  = create_slug(title)
+        video = data.get('video', None)
+        if video:
+            video = True
+        else:
+            video = False
+        qs = Artikull.objects.filter(title=title)
+        exists = qs.exists()
+        if not exists:
+            a = Artikull.objects.create(title=title,content=content,img=img,slug=slug,video=video)
+            return HttpResponseRedirect(a.get_absolute_url())    
+        return HttpResponseRedirect(qs[0].get_absolute_url())
 class News(ListView):
     queryset = Artikull.objects.order_by('-published')
     paginate_by = 12
