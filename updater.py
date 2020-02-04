@@ -14,7 +14,5 @@ def sck():
 # @sched.scheduled_job('interval', days=1)
 # def delO():
     # deleteOld()
-@sched.scheduled_job( 'interval', minutes=1)
-def sck():
-    print("   good   ")
+
 sched.start()
