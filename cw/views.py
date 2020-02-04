@@ -39,7 +39,7 @@ def Load(request):
                 if ans_exists:
                     ans_qs.update(popularity=F('popularity')+popularity)
                 else:
-                    Ans.objects.create(word=key,length=length,popularity=popularity,hint = value)
+                    Ans.objects.create(word=key,length=length,popularity=popularity,hint = clues)
                 
                 db.connections.close_all()
 def Create(request):
