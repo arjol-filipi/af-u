@@ -42,7 +42,7 @@ def scrappTop():
             con = p.find_all('div',attrs={'class':"articleContent"})
             
             try:
-                con[1]
+                con[0]
             except IndexError: 
                 continue
             try:

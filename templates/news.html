@@ -5,7 +5,12 @@
 News
 {% endblock title %}
 
-
+{% block extrahead %}
+<style> 
+@media all and (max-width:480px) {
+   .custom-class { width: 100%; display:block; }
+}   </style>
+{% endblock extrahead %}
 
   
 {% block content %}
@@ -55,8 +60,13 @@ News
               {% else %}Search{% endif %}" name="q" aria-label="Search">
               <button class="btn btn-secondary btn-lg" type="submit">Kerko</button>
             </div>
+            
           </form>
-      <a href="{% url 'news:news' %}" class="btn btn-primary btn-lg">Te gjitha</a>
+          {% if sq %}
+          
+          {% else %}<a href="{% url 'news:news' %}" class="btn btn-primary btn-lg custom-class">Te gjitha</a>
+          {% endif %}
+      
     </header>
 
     <!-- Page Features -->

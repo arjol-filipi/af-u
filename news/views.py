@@ -8,7 +8,7 @@ from django.db.models import Q
 from bs4 import BeautifulSoup
 import requests,re
 from django.utils.text import slugify
-from news.sc import scrappKlan
+from news.sc import scrappTop as st
 
 from .models import Artikull,Comment
 from django.views.decorators.csrf import csrf_exempt
@@ -113,4 +113,5 @@ def create_slug(title, new_slug=None):
         return slug
 
 def scrappTop(request):
-    scrappKlan()
+    print('ddsdfsdfds')
+    st()
