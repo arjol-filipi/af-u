@@ -100,7 +100,7 @@ def scrappKlan():
                 img = None
             
             main = p.find('main')
-            con = main.find_all('p')
+            con = main.find_all('p', text=re.compile("."))
            
             try:
                 con[0]
