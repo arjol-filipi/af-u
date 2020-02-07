@@ -1,8 +1,57 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}URL Shorner{% endblock title %}
+{% block extrahead %}
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static '/css/animate.css'%}">
+        <link rel="stylesheet" href="{% static '/css/style.css'%}">
+        <link rel="stylesheet" href="{% static '/css/media-queries.css'%} ">
+
+{% endblock extrahead %}
 
 {% block content %}
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Af-u
+     <span class="sr-only">(current)</span></a> 
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/shortu/">URL Shortner
+            </a>
+           
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/cw/">Crosswords</a>
+          </li>
+                    <li class="nav-item">
+            <a class="nav-link" href="/news/">News Agregator</a>
+          </li>
+          <li class="nav-item">
+            {% if user.is_authenticated %}
+                      
+            <a class="nav-link" href="{% url 'account_logout'%}">Log out!</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'account_login'%}">Log in!</a>
+            {% endif %}
+
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <br>    
 <form action="{% url 'shortu:submit' %}" method="POST">
     {% csrf_token %}
   <div class="form-group">
@@ -79,5 +128,11 @@
       </tbody>
     </table>
     </div>
+
+        <script src="{% static '/js/jquery.backstretch.min.js'%}"></script>
+        <script src="{% static '/js/wow.min.js'%}"></script>
+        <script src="{% static '/js/waypoints.min.js'%}"></script>
+        <script src="{% static '/js/scripts.js'%}"></script>
+
 
 {% endblock content %}

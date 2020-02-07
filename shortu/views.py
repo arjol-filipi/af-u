@@ -26,7 +26,10 @@ def Follow(request,shorturl):
 
 def FormView(request):
     toplink = Link.objects.annotate(Count('vi')).order_by('-vi__count')[:5]
-    yl = Link.objects.filter(user = request.user)
+    if request.user.is_authenticated:
+        yl = Link.objects.filter(user = request.user)
+    else:
+        yl = None
     context = {
         'form' :UrlForm,
         'links':yl,
