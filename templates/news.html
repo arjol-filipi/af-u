@@ -6,10 +6,7 @@ News
 {% endblock title %}
 
 {% block extrahead %}
-<style> 
-@media all and (max-width:480px) {
-   .custom-class { width: 100%; display:block; }
-}   </style>
+
 {% endblock extrahead %}
 
   
@@ -52,9 +49,10 @@ News
   <div class="container">
 
     <!-- Jumbotron Header -->
-    <header class="jumbotron my-4">
-<form class="form-inline pl-7 float-right" action="{% url 'news:search' %}" method="get">
-<div class="md-form my-0">
+    <header class="card m-4" style="align-items: center;">
+          <form class="form-inline pl-7 " action="{% url 'news:search' %}" method="get">
+            <div class="md-form my-0">
+            <a href="{% url 'news:news' %}" class="btn btn-primary custom-class">Te gjitha</a>
               <input class="form-control mr-sm-2" type="text" placeholder="{% if sq %}
               {{ sq }}
               {% else %}Search{% endif %}" name="q" aria-label="Search">
@@ -64,31 +62,33 @@ News
           </form>
           {% if sq %}
           
-          {% else %}<a href="{% url 'news:news' %}" class="btn btn-primary btn-lg custom-class">Te gjitha</a>
+          {% else %}
           {% endif %}
       
     </header>
-
+</div>
     <!-- Page Features -->
     <div class="row text-center">
         {% for article in object_list %}
-        
-        
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100">
-          {% if article.video %}
-          <img class="card-img-top" src="{{ article.get_icon }}" alt="">
-          {% else %}
-          <img class="card-img-top" src="{{ article.img }}" alt="">
-          {% endif %}
-          
+      <div class="container">
 
-          <div class="card-body">
-            <h4 class="card-title">{{ article.title|truncatechars:100 }}</h4>
-            <p class="card-text">{{ article.content|striptags|truncatechars:80 }}</p>
-          </div>
-          <div class="card-footer">
-            <a href="{% url 'news:article' article.slug %}" class="btn btn-primary">Me teper!</a>
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+          <div class="card h-100">
+            {% if article.video %}
+            <img class="card-img-top" src="{{ article.get_icon }}" alt="">
+            {% else %}
+            <img class="card-img-top" src="{{ article.img }}" alt="">
+            {% endif %}
+            
+
+            <div class="card-body">
+              <h4 class="card-title">{{ article.title|truncatechars:100 }}</h4>
+              <p class="card-text">{{ article.content|striptags|truncatechars:80 }}</p>
+            </div>
+            <div class="card-footer">
+              <a href="{% url 'news:article' article.slug %}" class="btn btn-primary">Me teper!</a>
+            </div>
           </div>
         </div>
       </div>
