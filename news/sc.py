@@ -20,14 +20,20 @@ def scrappTop():
     url = "http://top-channel.tv/artikuj/te-fundit/"
     content = session.get(url,verify= False).content
     soup = BeautifulSoup(content,"html.parser")
+    del(content)
     art = soup.find_all('div',attrs={'class':"articles"})
+    print(soup)
+    del(soup)
+    
     divs = art[0].find_all('div',attrs={'class':"article sub col-xs-12 col-sm-12 col-md-12 col-lg-12"})
-    # print(divs[1])
+    
     
     for div in divs:
         links = div.find_all('a',attrs={'class':"articleLink",'href': re.compile("^http://")})
         for link in links:
+            
             url = (link.get('href'))
+            
             ar = session.get(url,verify= False).content
             p = BeautifulSoup(ar,"html.parser")
             title = p.find_all('div',attrs={'class':"inner titleInner"})
@@ -62,7 +68,6 @@ def scrappTop():
             jsondata = json.dumps(body)
             jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
             req.add_header('Content-Length', len(jsondataasbytes))
-            print (jsondataasbytes)
             response = urllib.request.urlopen(req, jsondataasbytes)
 
 def scrappKlan():
@@ -72,9 +77,9 @@ def scrappKlan():
     content = session.get(url,verify= False).content
     soup = BeautifulSoup(content,"html.parser")
     art = soup.find_all('div',attrs={'class':"tab-pane fade show active"})
-    # print(art)
+    
     divs = art[0].find_all('article',attrs={'class':"tab-news-box"})
-    # print(divs)
+    
     
     for div in divs:
         
@@ -123,7 +128,7 @@ def scrappKlan():
             jsondata = json.dumps(body)
             jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
             req.add_header('Content-Length', len(jsondataasbytes))
-            print (jsondataasbytes)
+            
             response = urllib.request.urlopen(req, jsondataasbytes)
 
 # scrappKlan()
