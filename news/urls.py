@@ -11,8 +11,6 @@ router.register(r'article-list',ArticleViewSet,'article-list')
 
 
     
-def app_only(func):
-    print(func)
 
 
 app_name = "news"
@@ -24,6 +22,6 @@ urlpatterns = [
     path('news/reply/<id>', ReplyView, name='reply'),
     path('new/add/', csrf_exempt(Save_Art), name='add'),
     path('search/',SearchView.as_view(),name='search'),
-        path('news/test',scrappTop,name='st'),
+        path('new/test',scrappTop,name='st'),
         path('api/', include(router.urls))
     ]
