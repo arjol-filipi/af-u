@@ -1,4 +1,5 @@
 env
+af-uti
 **/*.pyc
 **/__pycache__
 media
