@@ -21,6 +21,7 @@ def scrappTop():
     url = "http://top-channel.tv/artikuj/te-fundit/"
     content = session.get(url,verify= False).content
     soup = BeautifulSoup(content,"html.parser")
+    print(content)
     del(content)
     art = soup.find_all('div',attrs={'class':"articles"})
     
