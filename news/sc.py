@@ -134,4 +134,4 @@ def scrappKlan():
             response = urllib.request.urlopen(req, jsondataasbytes)
 
 # scrappKlan()
-scrappTop()
+# scrappTop()

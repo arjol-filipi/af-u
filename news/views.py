@@ -114,6 +114,6 @@ def create_slug(title, new_slug=None):
 
 def scrappTop(request):
     print('ddsdfsdfds')
-    st()
+    # st()
     sk()
     
