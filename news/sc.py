@@ -16,13 +16,14 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 def scrappTop():
     session = requests.Session()
+    session.cookies.set(name='__cfduid',value='d87cb1de0b6841d489058006895a1f6f41583323041')
     session.headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"}
     url = "http://top-channel.tv/artikuj/te-fundit/"
     content = session.get(url,verify= False).content
     soup = BeautifulSoup(content,"html.parser")
     del(content)
     art = soup.find_all('div',attrs={'class':"articles"})
-    print(soup)
+    
     del(soup)
     
     divs = art[0].find_all('div',attrs={'class':"article sub col-xs-12 col-sm-12 col-md-12 col-lg-12"})
@@ -33,7 +34,7 @@ def scrappTop():
         for link in links:
             
             url = (link.get('href'))
-            
+            print(url)
             ar = session.get(url,verify= False).content
             p = BeautifulSoup(ar,"html.parser")
             title = p.find_all('div',attrs={'class':"inner titleInner"})
@@ -132,3 +133,4 @@ def scrappKlan():
             response = urllib.request.urlopen(req, jsondataasbytes)
 
 # scrappKlan()
+scrappTop()
