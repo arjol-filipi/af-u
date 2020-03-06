@@ -73,6 +73,8 @@ def scrappTop():
             response = urllib.request.urlopen(req, jsondataasbytes)
 
 def scrappKlan():
+    res = {}
+    us=0
     session = requests.Session()
     session.headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"}
     url = "https://tvklan.al/arkiva/"
@@ -87,7 +89,10 @@ def scrappKlan():
         
         links = div.find_all('a')
         for link in links:
+            us+=1
             url = (link.get('href'))
+            res[us]=  url
+            
             ar = session.get(url,verify= False).content
             p = BeautifulSoup(ar,"html.parser")
             title = p.find_all('div',attrs={'class':"col-lg-8 col-12 readmore-title"})
@@ -132,6 +137,58 @@ def scrappKlan():
             req.add_header('Content-Length', len(jsondataasbytes))
             
             response = urllib.request.urlopen(req, jsondataasbytes)
+    return res
 
+def scrappFax():
+    res = {}
+    us=0
+    session = requests.Session()
+    session.headers = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"}
+    base_url = 'https://www.faxweb.al/feed/'
+    content = session.get(base_url,verify= False).text
+    
+    reg_fax = '(?<=k>https://www.faxweb.al/)(.*)(?=<)'
+    li = re.findall(reg_fax,content)
+    
+    for link in li:
+            us+=1
+            url = 'https://www.faxweb.al/'+link
+            
+            res[us]=  url
+            ar = session.get(url,verify= False).content
+            p = BeautifulSoup(ar,"html.parser")
+            title = p.find_all('h1',attrs={'class':"post-title entry-title"})
+            title = p.find_all('h1')[0].text
+            img = p.find('img',attrs={'class':"attachment-jannah-image-post size-jannah-image-post lazy-img wp-post-image"})
+            iframe = p.find('iframe')
+            video = False
+            if img:
+                img = img.get('data-src')
+            else:
+                video = True
+                img = iframe.get('src')
+            main = p.find('div',attrs={'class':"entry-content entry clearfix"})
+            con = main.find_all('p')
+            
+            print(url)
+            content ="".join( str(c) for c in con)
+            body ={
+            'title':title,
+            'content':content,
+            'img':img}
+            if video:
+                body['video'] = True
+            myurl = "https://af-u.herokuapp.com/new/add/"
+            req = urllib.request.Request(myurl)
+            req.add_header('Content-Type', 'application/json; charset=utf-8')
+            jsondata = json.dumps(body)
+            jsondataasbytes = jsondata.encode('utf-8')   # needs to be bytes
+            req.add_header('Content-Length', len(jsondataasbytes))
+            
+            response = urllib.request.urlopen(req, jsondataasbytes)
+    return res
+    # print(res)    
+# scrappFax()
 # scrappKlan()
+
 # scrappTop()

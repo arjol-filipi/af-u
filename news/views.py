@@ -2,14 +2,15 @@ from django.shortcuts import render
 from django.views.generic import ListView,DetailView
 from .forms import CommentForm,ReplyForm
 from django.views.decorators.http import require_GET, require_POST
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse,JsonResponse
 from django.db.models import Q
 #scrap
-from bs4 import BeautifulSoup
+
 import requests,re
 from django.utils.text import slugify
-from news.sc import scrappTop as st
+
 from news.sc import scrappKlan as sk
+from news.sc import scrappFax as sf
 from .models import Artikull,Comment
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -115,5 +116,12 @@ def create_slug(title, new_slug=None):
 def scrappTop(request):
     print('ddsdfsdfds')
     # st()
-    sk()
-    
+    res = sk()
+
+    return JsonResponse(res) 
+def scrappF(request):
+    print('ddsdfsdfds')
+    # st()
+    res = sf()
+
+    return JsonResponse(res) 
