@@ -10,21 +10,32 @@ import requests,re
 from django.utils.text import slugify
 
 from news.sc import scrappKlan as sk
+from news.sc import scrappTop as st
 from news.sc import scrappFax as sf
 from .models import Artikull,Comment
 from django.views.decorators.csrf import csrf_exempt
 import json
 @csrf_exempt
 def Save_Art(request):
-    print("at here")
+    sr = {  "tvKlan":1,
+     "Faxweb":2,
+     "top-channel":3 }
+    cat_c = ["Politikë","Aktualitet", "Sport","Lifestyle","Rajoni","Bota","Teknologji", "Kuriozitet","Kulturë",
+    "Kronikë"]
     if request.method == 'POST':
         data = json.loads(request.body)
-        print(data)
+        # print(data)
         title = data.get('title', None)
         content = data.get('content', None)
         img = data.get('img', None)
         slug  = create_slug(title)
         video = data.get('video', None)
+        s = data.get('s', None)
+        cat = data.get('cat', None)
+        if cat in cat_c:
+            cat= cat_c.index(cat)+1
+        else:
+            cat=11
         if video:
             video = True
         else:
@@ -32,7 +43,7 @@ def Save_Art(request):
         qs = Artikull.objects.filter(title=title)
         exists = qs.exists()
         if not exists:
-            a = Artikull.objects.create(title=title,content=content,img=img,slug=slug,video=video)
+            a = Artikull.objects.create(title=title,content=content,img=img,slug=slug,video=video,nga=sr[s],categ=cat)
             return HttpResponseRedirect(a.get_absolute_url())    
         return HttpResponseRedirect(qs[0].get_absolute_url())
 class News(ListView):
@@ -119,6 +130,9 @@ def scrappTop(request):
     res = sk()
 
     return JsonResponse(res) 
+def ScTapp(request):
+    res = st()
+    return JsonResponse(res,safe=False)
 def scrappF(request):
     print('ddsdfsdfds')
     # st()

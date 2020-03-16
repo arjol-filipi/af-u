@@ -4,6 +4,24 @@ from django.urls import reverse
 
 import re
 
+source = (
+    (1, "tvKlan"),
+    (2, "Faxweb"),
+    (3, "top-channel")
+)
+cat = (
+    (1, "Politike"),
+    (2, "Aktualitet"),
+    (3, "Sport"),
+    (4, "Lifestyle"),
+    (5, "Rajoni"),
+    (6, "Bota"),
+    (7, "Teknologji"),
+    (8, "Kuriozitet"),
+    (9, "Kulture"),
+    (10, "Kronike"),
+    (11, "Te Tjera")
+)
 class Artikull(models.Model):
     
     img = models.TextField(blank=True,null = True)
@@ -12,8 +30,9 @@ class Artikull(models.Model):
     slug = models.SlugField(unique=True,max_length=255)
     published = models.DateTimeField(auto_now_add=True, blank=True)
     video = models.BooleanField(default=False)
-    
-
+    nga = models.IntegerField(choices = source, default=1)
+    categ = models.IntegerField(choices = cat, default=11)
+    hits = models.IntegerField(default=0)
     def __str__(self):
         return self.title
 

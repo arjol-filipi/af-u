@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls import url,include
-from .views import News,Article,CommentView,ReplyView,SearchView,Save_Art,scrappTop,scrappF
+from .views import News,Article,CommentView,ReplyView,SearchView,Save_Art,scrappTop,scrappF,ScTapp
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import routers
 from .api.views import ArticleViewSet
@@ -18,5 +18,6 @@ urlpatterns = [
     path('search/',SearchView.as_view(),name='search'),
         path('new/test',scrappTop,name='st'),
         path('new/test2',scrappF,name='sf'),
+        path('new/test3',ScTapp,name='sta'),
         path('api/', include(router.urls))
     ]
