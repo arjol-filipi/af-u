@@ -11,19 +11,39 @@ class ArticleViewSet(viewsets.ReadOnlyModelViewSet):
     paginate_by = 20
     def get_queryset(self):
         q = None
+        c=None
+        try:
+            c=self.request.META['HTTP_C']
+            c = [int(ca) for ca in c.split(',')  ]
+        except:
+            pass
+        print(type(c))
+        s=None
+        try:
+            s=self.request.META['HTTP_S']
+            s = [int(sa) for sa in s.split(',')  ]
+        except:
+            pass
         try:
             q=(self.request.META['HTTP_Q'])
         except:
             pass
+        
         rk=(self.request.META['HTTP_X_KEY'])
         if ak!=rk:
             queryset = Artikull.objects.none()
-        elif not q:
-            queryset = Artikull.objects.all()
         else:
-            queryset = Artikull.objects.filter(
+            queryset = Artikull.objects.all()
+        if c:
+            queryset = Artikull.objects.filter(categ__in=c)
+        if s:
+            queryset = Artikull.objects.filter(nga__in=s)
+        if q:
+            queryset = queryset.filter(
                 Q(title__icontains=q)|Q(content__icontains=q)
             )
+            
+        
         return queryset.order_by('-published')
 
         
